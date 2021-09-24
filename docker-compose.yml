@@ -7,18 +7,18 @@ volumes:
 
 networks:
   backend: # ros <--> backend-web
-  frontend: # ros <--> frontend-web
+  frontend: # backend-web <--> frontend-web
 
 services:
-  ros:
-    build: ./ros
-    networks:
-      - backend
-    environment:
-      PASSWROD: hello123
-      OTHER_ENV: 8500
-    # volumes:
-    #   - ros-volume:/hello
+  # ros:
+  #   build: ./ros
+  #   networks:
+  #     - backend
+  #   environment:
+  #     PASSWROD: hello123
+  #     OTHER_ENV: 8500
+  #   # volumes:
+  #   #   - ros-volume:/hello
   backend-web:
     build: ./backend-web
     networks:
@@ -26,11 +26,11 @@ services:
       - frontend
     environment:
       PASSWROD: hello123
-      OTHER_ENV: 8500
+      OTHER_ENV: 8501
     # volumes:
     #   - backend-volume:/hello
-    depends_on:
-      - ros
+  #   depends_on:
+  #     - ros
       
   frontend-web:
     build: ./frontend-web
@@ -42,4 +42,4 @@ services:
     volumes:
       - ./frontend-web:/app
     depends_on:
-      - backend
+      - backend-web
