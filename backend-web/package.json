@@ -6,7 +6,8 @@
   "license": "GPLv3",
   "private": true,
   "scripts": {
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "lint": "eslint --fix src/"
   },
   "devDependencies": {
     "eslint": "^7.32.0"
