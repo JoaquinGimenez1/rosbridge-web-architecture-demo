@@ -1,10 +1,9 @@
 
-# FROM node:16
-
+FROM ros:noetic-robot
 
 # FROM ros:noetic-robot
 
-# WORKDIR /
+WORKDIR /
 
 # COPY init_turtlesim.sh ./
 
