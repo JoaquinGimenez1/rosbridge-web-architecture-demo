@@ -12,4 +12,4 @@ docker-compose up
 ## Installation requirements
 - Docker `v20.10.8`
 - Docker Compose `v1.25.0`
-- Yarn `v1.22.10`[optional]
+- Yarn `v1.22.10` [optional]
