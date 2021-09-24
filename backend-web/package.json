@@ -12,6 +12,7 @@
     "eslint": "^7.32.0"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "roslib": "^1.1.0"
   }
 }
