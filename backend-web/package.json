@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
-  "license": "GPLv3",
-  "private": true,
+  "license": "ISC",
   "scripts": {
     "start": "node ./src/index.js",
     "lint": "eslint --fix src/"
