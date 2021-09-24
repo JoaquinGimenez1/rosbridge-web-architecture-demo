@@ -1,5 +1,6 @@
 # ROS Web Scalable Architechture
 
+## Getting Started
 ## How to run it
 ```bash
 # If you have yarn installed
@@ -10,6 +11,7 @@ docker-compose up
 ```
 
 ## Installation requirements
-- Docker `v20.10.8`
-- Docker Compose `v1.25.0`
-- Yarn `v1.22.10` [optional]
+- nodejs `v14.17.0`
+- docker `v20.10.8`
+- docker-compose `v1.25.0`
+- yarn `v1.22.10` [optional]
