@@ -1,45 +1,48 @@
 version: '3.3'
 
-volumes:
-  backend-volume: #if needed
-  frontend-volume: #if needed
-  ros-volume: #if needed
+# volumes:
+#   backend-volume: #if needed
+#   frontend-volume: #if needed
+#   ros-volume: #if needed
 
 networks:
   backend: # ros <--> backend-web
-  frontend: # ros <--> frontend-web
+  frontend: # backend-web <--> frontend-web
 
 services:
-  ros:
-    build: ./ros
-    networks:
-      - backend
-    environment:
-      PASSWROD: hello123
-      OTHER_ENV: 8500
-    # volumes:
-    #   - ros-volume:/hello
+  # ros:
+  #   build: ./ros
+  #   networks:
+  #     - backend
+  #   environment:
+  #     PASSWORD: hello123
+  #     OTHER_ENV: 8500
+  #   # volumes:
+  #   #   - ros-volume:/hello
   backend-web:
     build: ./backend-web
     networks:
       - backend
       - frontend
     environment:
-      PASSWROD: hello123
-      OTHER_ENV: 8500
+      # PASSWORD: hello123
+      API_PORT: &api_port 3001
     # volumes:
     #   - backend-volume:/hello
-    depends_on:
-      - ros
+    # depends_on:
+    #   - ros
       
   frontend-web:
     build: ./frontend-web
     networks:
       - frontend
+    ports:
+      - "8081:3000"
     environment:
-      PASSWROD: hello123
-      OTHER_ENV: 8500
+      API_HOST: backend-web
+      API_PORT: *api_port
+      # PASSWORD: hello123
     volumes:
       - ./frontend-web:/app
     depends_on:
-      - backend
+      - backend-web

@@ -1,0 +1,11 @@
+{
+  "name": "scalable-web-ros",
+  "version": "1.0.0",
+  "repository": "git@github.com:JoaquinGimenez1/scalable-web-ros.git",
+  "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
+  "license": "ISC",
+  "scripts": {
+    "start": "docker-compose up",
+    "clean": "docker-compose down -v --remove-orphans && docker network prune -f"
+  }
+}

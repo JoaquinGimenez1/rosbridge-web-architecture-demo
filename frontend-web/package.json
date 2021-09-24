@@ -1,7 +1,8 @@
 {
   "name": "frontend-web",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
+  "license": "ISC",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -14,6 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "lint": "eslint --fix src/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -34,5 +36,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.26.0"
   }
 }
