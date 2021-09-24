@@ -1,13 +1,21 @@
 # ROS Web Scalable Architechture
 
 ## Getting Started
+This project is it intended to be used as a demo for ...
 ## How to run it
 ```bash
-# If you have yarn installed
-yarn start
+cd /directory/to/scalable-web-ros
+# Install packages
+yarn
 
-# If you have docker-compose
-docker-compose up
+cd backend-web/
+yarn 
+
+cd ../frontend-web/
+yarn
+
+# Run all the docker images
+yarn start
 ```
 
 ## Installation requirements
