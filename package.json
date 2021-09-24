@@ -1,6 +1,6 @@
 {
   "name": "scalable-web-ros",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "repository": "git@github.com:JoaquinGimenez1/scalable-web-ros.git",
   "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
   "license": "ISC",

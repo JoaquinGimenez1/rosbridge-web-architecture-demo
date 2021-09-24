@@ -5,9 +5,8 @@ This project is it intended to be used as a demo for ...
 ## How to run it
 ```bash
 cd /directory/to/scalable-web-ros
-# Install packages
-yarn
 
+# Install packages
 cd backend-web/
 yarn 
 
@@ -23,3 +22,9 @@ yarn start
 - docker `v20.10.8`
 - docker-compose `v1.25.0`
 - yarn `v1.22.10` [optional]
+## Cleanup images
+```bash
+cd /directory/to/scalable-web-ros
+
+yarn clean
+```
