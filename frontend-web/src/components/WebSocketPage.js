@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 const API_HOST = process.env.API_HOST || "localhost";
-const API_PORT = process.env.API_PORT || "3001";
+const API_PORT = process.env.API_PORT || "5000";
 
 const WEB_SOCKET_URL = `ws://${API_HOST}:${API_PORT}`;
 

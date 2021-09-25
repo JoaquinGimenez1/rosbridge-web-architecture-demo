@@ -1,37 +1,58 @@
 const { Ros, Topic } = require("roslib");
 
-const ROS_PORT = process.env.ROS_PORT || "localhost";
-const ROS_HOST = process.env.ROS_HOST || "9090";
+const ROS_HOST = process.env.ROS_HOST || "localhost";
+const ROS_PORT = process.env.ROS_PORT || "9090";
 
-module.exports = {
-  subscribeToChatter: async () => {
+class RosHandler {
+  constructor() {
+    this.ros = null;
+    this.listener = null;
+    this.connected = false;
+  }
+
+  connect = () => {
     // Connecting to ROS
     // -----------------
-    const ros = new Ros({ url: `ws://${ROS_HOST}:${ROS_PORT}` });
+    this.ros = new Ros({ url: `ws://${ROS_HOST}:${ROS_PORT}` });
 
-    ros.on("connection", () => {
+    this.ros.on("connection", () => {
       console.log("Connected to websocket server.");
+      this.connected = true;
     });
 
-    ros.on("error", (error) => {
+    this.ros.on("error", (error) => {
       console.log("Error connecting to websocket server: ", error);
+      this.connected = false;
     });
 
-    ros.on("close", () => {
+    this.ros.on("close", () => {
       console.log("Connection to websocket server closed.");
+      this.connected = false;
     });
+  };
 
+  unsubscribeToChatter = () => {
+    this.listener.unsubscribe();
+    this.listener = null;
+  };
+  subscribeToChatter = async () => {
     // Subscribing to a Topic
     // ----------------------
-    const listener = new Topic({
-      ros: ros,
+
+    await this.connect();
+
+    this.listener = new Topic({
+      ros: this.ros,
       name: "/chatter",
       messageType: "std_msgs/String",
     });
 
-    listener.subscribe((message) => {
-      console.log("Received message on " + listener.name + ": " + message.data);
-      listener.unsubscribe();
+    this.listener.subscribe((message) => {
+      console.log(
+        "Received message on " + this.listener.name + ": " + message.data
+      );
     });
-  },
-};
+  };
+}
+
+module.exports = new RosHandler();
