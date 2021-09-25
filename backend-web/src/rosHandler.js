@@ -56,4 +56,4 @@ class RosHandler {
   };
 }
 
-module.exports = new RosHandler();
+module.exports = RosHandler;
