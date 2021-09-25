@@ -2,7 +2,7 @@ version: '3.3'
 
 networks:
   ros: # ros-master <--> ros-talker <--> ros-listener (if enable)
-  backend: # ros <--> backend-web
+  # backend: # ros <--> backend-web
   frontend: # backend-web <--> frontend-web
 
 services:
@@ -10,31 +10,37 @@ services:
   ros-master:
     image: ros:noetic-ros-core
     command: stdbuf -o L roscore
-    # ports:
-    #   - "9090:9090"
     networks:
       - ros
-      - backend
     restart: always
-  # ROS Talker Node
   ros-talker:
-    image: ros:noetic-ros-core
+    build: ./ros-talker
+    networks:
+      - ros
+    environment:
+      ROS_HOST: ros-master
+      ROS_PORT: 11311
     depends_on:
       - ros-master
-    environment:
-      ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
-      ROS_HOSTNAME: "ros-talker"
-    command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
-    networks:
-      - ros
-    restart: always
-  # # ROS Listener
+  # # ROS Talker Node
+  # ros-talker:
+  #   image: ros:noetic-ros-core
+  #   depends_on:
+  #     - ros-master
+  #   environment:
+  #     ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
+  #     ROS_HOSTNAME: "ros-talker"
+  #   command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
+  #   networks:
+  #     - ros
+  #   restart: always
+  # ROS Listener
   # ros-listener:
   #   image: ros:noetic-ros-core
   #   depends_on:
   #     - ros-master
   #   environment:
-  #     ROS_MASTER_URI: *ros_master_uri
+  #     ROS_MASTER_URI: "http://ros-master:11311"
   #     ROS_HOSTNAME: "ros-listener"
   #   command: stdbuf -o L rostopic echo /chatter
   #   networks:
@@ -45,10 +51,10 @@ services:
   backend-web:
     build: ./backend-web
     networks:
-      - backend
+      - ros
       - frontend
     environment:
-      ROS_HOST: ros-master
+      ROS_HOST: 
       ROS_PORT: 11311
       API_HOST: backend-web
       API_PORT: &api_port 3001
@@ -65,7 +71,6 @@ services:
     environment:
       API_HOST: backend-web
       API_PORT: *api_port
-      # PASSWORD: hello123
     volumes:
       - ./frontend-web:/app
     depends_on:
