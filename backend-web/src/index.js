@@ -4,34 +4,32 @@ const RosHandler = require("./rosHandler");
 const app = express();
 const expressWs = require("express-ws")(app);
 
-const port = process.env.API_PORT || 5000;
 const HOST = process.env.API_HOST || "localhost";
-
-app.use((req, res, next) => {
-  console.log("Middleware");
-  req.testing = "testing";
-  return next();
-});
+const port = process.env.API_PORT || 5000;
 
 app.get("/", (req, res) => {
-  console.log("Get Router", req.testing);
-
-  try {
-    RosHandler.subscribeToChatter();
-  } catch (error) {
-    console.log("Error", error.message);
-  }
-
-  res.send("Hello World!");
+  res.send("Please connect via WS");
 });
 
 app.ws("/", (ws, req) => {
-  ws.on("message", (msg) => {
-    console.log("msg", msg);
+  console.log("Client connected");
+
+  const rh = new RosHandler();
+  rh.subscribeToChatter((message) => {
+    ws.send(`I just heard: ${message}`);
   });
-  console.log("socket", req.testing);
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+    rh.unsubscribeToChatter();
+  });
+
+  ws.on("message", (msg) => {
+    console.log("Message received", msg);
+    ws.send(`You said: ${msg}`);
+  });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://${HOST}:${port}`);
+  console.log(`Backend API listening on http://${HOST}:${port}`);
 });
