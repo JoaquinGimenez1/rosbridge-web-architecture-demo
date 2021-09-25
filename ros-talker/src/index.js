@@ -24,7 +24,7 @@ const talker = () => {
 
       setInterval(() => {
         // Construct the message
-        msg.data = `Right now is ${new Date().toISOString()}`;
+        msg.data = `Right now it is ${new Date().toISOString()}`;
         // Publish over ROS
         pub.publish(msg);
         // Log through stdout and /rosout

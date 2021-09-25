@@ -35,11 +35,11 @@ class RosHandler {
     this.listener.unsubscribe();
     this.listener = null;
   };
-  subscribeToChatter = async () => {
+  subscribeToChatter = (callback) => {
     // Subscribing to a Topic
     // ----------------------
 
-    await this.connect();
+    this.connect();
 
     this.listener = new Topic({
       ros: this.ros,
@@ -51,6 +51,7 @@ class RosHandler {
       console.log(
         "Received message on " + this.listener.name + ": " + message.data
       );
+      callback(message.data);
     });
   };
 }

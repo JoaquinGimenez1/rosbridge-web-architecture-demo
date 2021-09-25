@@ -21,7 +21,9 @@ app.ws("/", (ws, req) => {
   // } catch (error) {
   //   console.log("Error", error.message);
   // }
-  RosHandler.subscribeToChatter();
+  RosHandler.subscribeToChatter((message) => {
+    ws.send(`I just heard: ${message}`);
+  });
 
   ws.on("close", () => {
     console.log("Client disconnected");
