@@ -7,7 +7,6 @@ class RosHandler {
   constructor() {
     this.ros = null;
     this.listener = null;
-    this.connected = false;
   }
 
   connect = () => {
@@ -17,17 +16,14 @@ class RosHandler {
 
     this.ros.on("connection", () => {
       console.log("Connected to websocket server.");
-      this.connected = true;
     });
 
     this.ros.on("error", (error) => {
       console.log("Error connecting to websocket server: ", error);
-      this.connected = false;
     });
 
     this.ros.on("close", () => {
       console.log("Connection to websocket server closed.");
-      this.connected = false;
     });
   };
 

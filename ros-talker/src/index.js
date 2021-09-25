@@ -5,7 +5,7 @@ const stdMsgs = rosnodejs.require("std_msgs").msg;
 const ROS_HOST = process.env.ROS_HOST || "localhost";
 const ROS_PORT = process.env.ROS_PORT || "11311";
 
-const talker = () => {
+const startTalker = () => {
   rosnodejs
     .initNode("/talker_node", {
       rosMasterUri: `http://${ROS_HOST}:${ROS_PORT}`,
@@ -13,13 +13,7 @@ const talker = () => {
       onTheFly: true,
     })
     .then((rosNode) => {
-      // rosnodejs.loadAllPackages();
-      // const stdMsgs = rosnodejs.require("std_msgs").msg;
-      // Need to require message AFTER the node has been initialized
-      // Ref: https://github.com/RethinkRobotics-opensource/rosnodejs#generating-messages
-
       let pub = rosNode.advertise("/chatter", stdMsgs.String);
-      // let count = 0;
       const msg = new stdMsgs.String();
 
       setInterval(() => {
@@ -38,4 +32,4 @@ const talker = () => {
 };
 
 /* istanbul ignore next */
-if (require.main === module) talker();
+if (require.main === module) startTalker();
