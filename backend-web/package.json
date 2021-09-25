@@ -1,17 +1,21 @@
 {
   "name": "backend-web",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "main": "src/index.js",
   "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
   "license": "ISC",
   "scripts": {
     "start": "node ./src/index.js",
+    "start:dev": "nodemon ./src/index.js",
     "lint": "eslint --fix src/"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "nodemon": "^2.0.13"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-ws": "^5.0.2",
+    "roslib": "^1.1.0"
   }
 }

@@ -1,0 +1,13 @@
+{
+  "name": "ros",
+  "version": "0.2.0",
+  "main": "src/index.js",
+  "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
+  "license": "ISC",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "rosnodejs": "^3.0.2"
+  }
+}
