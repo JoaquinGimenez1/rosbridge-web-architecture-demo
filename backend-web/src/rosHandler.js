@@ -4,7 +4,9 @@ const ROS_PORT = process.env.ROS_PORT || null;
 const ROS_HOST = process.env.ROS_HOST || null;
 
 module.exports = {
-  subscribeToChatter: () => {
+  subscribeToChatter: async () => {
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
+
     const ros = new Ros({ url: `ws://${ROS_HOST}:${ROS_PORT}` });
 
     ros.on("connection", () => {
