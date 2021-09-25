@@ -16,6 +16,8 @@ services:
   ros-master:
     image: ros:noetic-ros-core
     command: stdbuf -o L roscore
+    ports:
+      - "9090:9090"
     networks:
       - ros
       - backend
@@ -26,38 +28,41 @@ services:
     depends_on:
       - ros-master
     environment:
-      - "ROS_MASTER_URI=http://ros-master:11311"
-      - "ROS_HOSTNAME=ros-talker"
-    command: stdbuf -o L rostopic pub /chatter std_msgs/String "$$(date)" -r 1
+      ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
+      ROS_HOSTNAME: "ros-talker"
+    command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
     networks:
       - ros
     restart: always
-  # ROS Listener
-  ros-listener:
-    image: ros:noetic-ros-core
-    depends_on:
-      - ros-master
-    environment:
-      - "ROS_MASTER_URI=http://ros-master:11311"
-      - "ROS_HOSTNAME=ros-listener"
-    command: stdbuf -o L rostopic echo /chatter
-    networks:
-      - ros
-    restart: always
+  # # ROS Listener
+  # ros-listener:
+  #   image: ros:noetic-ros-core
+  #   depends_on:
+  #     - ros-master
+  #   environment:
+  #     ROS_MASTER_URI: *ros_master_uri
+  #     ROS_HOSTNAME: "ros-listener"
+  #   command: stdbuf -o L rostopic echo /chatter
+  #   networks:
+  #     - ros
+  #   restart: always
   # Web side of the project
+  # Backend handling the connection with ROS
   backend-web:
     build: ./backend-web
     networks:
       - backend
       - frontend
     environment:
-      # PASSWORD: hello123
+      ROS_HOST: ros-master
+      ROS_PORT: 9090
+      API_HOST: backend-web
       API_PORT: &api_port 3001
     # volumes:
     #   - backend-volume:/hello
       # depends_on:
       #   - ros-talker
-      
+  # Frontend handling the UI
   frontend-web:
     build: ./frontend-web
     networks:
