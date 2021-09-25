@@ -1,11 +1,13 @@
 version: '3.3'
 
 networks:
-  ros: # ros-master <--> ros-talker <--> ros-listener (if enable)
-  # backend: # ros <--> backend-web
+  ros: # ros-master <--> ros-talker <--> backend
   frontend: # backend-web <--> frontend-web
 
 services:
+  ###########################
+  # ROS side of the project
+  ###########################
   # ROS Master Node
   ros-master:
     image: ros:noetic-ros-core
@@ -13,6 +15,7 @@ services:
     networks:
       - ros
     restart: always
+  # ROS Talker Node using rosnodejs
   ros-talker:
     build: ./ros-talker
     networks:
@@ -22,45 +25,23 @@ services:
       ROS_PORT: 11311
     depends_on:
       - ros-master
-  # # ROS Talker Node
-  # ros-talker:
-  #   image: ros:noetic-ros-core
-  #   depends_on:
-  #     - ros-master
-  #   environment:
-  #     ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
-  #     ROS_HOSTNAME: "ros-talker"
-  #   command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
-  #   networks:
-  #     - ros
-  #   restart: always
-  # ROS Listener
-  # ros-listener:
-  #   image: ros:noetic-ros-core
-  #   depends_on:
-  #     - ros-master
-  #   environment:
-  #     ROS_MASTER_URI: "http://ros-master:11311"
-  #     ROS_HOSTNAME: "ros-listener"
-  #   command: stdbuf -o L rostopic echo /chatter
-  #   networks:
-  #     - ros
-  #   restart: always
+  ###########################
   # Web side of the project
+  ###########################
   # Backend handling the connection with ROS
+  # and business logic
   backend-web:
     build: ./backend-web
     networks:
       - ros
       - frontend
     environment:
-      ROS_HOST: 
+      ROS_HOST: "172.17.0.1"
       ROS_PORT: 11311
       API_HOST: backend-web
       API_PORT: &api_port 3001
     depends_on:
       - ros-talker
-
   # Frontend handling the UI
   frontend-web:
     build: ./frontend-web
