@@ -5,8 +5,8 @@ const ROS_HOST = process.env.ROS_HOST || null;
 
 module.exports = {
   subscribeToChatter: async () => {
-    // await new Promise((resolve) => setTimeout(resolve, 5000));
-
+    // Connecting to ROS
+    // -----------------
     const ros = new Ros({ url: `ws://${ROS_HOST}:${ROS_PORT}` });
 
     ros.on("connection", () => {
@@ -21,6 +21,8 @@ module.exports = {
       console.log("Connection to websocket server closed.");
     });
 
+    // Subscribing to a Topic
+    // ----------------------
     const listener = new Topic({
       ros: ros,
       name: "/chatter",
