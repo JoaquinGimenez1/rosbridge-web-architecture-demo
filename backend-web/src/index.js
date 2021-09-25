@@ -16,17 +16,23 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   console.log("Get Router", req.testing);
 
-  try {
-    RosHandler.subscribeToChatter();
-  } catch (error) {
-    console.log("Error", error.message);
-  }
+  console.log("CLIENTS", expressWs.getWss().clients);
 
   res.send("Hello World!");
 });
 
 app.ws("/", (ws, req) => {
+  ws.on("connection", () => {
+    console.log("someone conected");
+  });
+
   ws.on("message", (msg) => {
+    try {
+      RosHandler.subscribeToChatter();
+    } catch (error) {
+      console.log("Error", error.message);
+    }
+
     console.log("msg", msg);
   });
   console.log("socket", req.testing);

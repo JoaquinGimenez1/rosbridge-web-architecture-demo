@@ -1,7 +1,7 @@
 const { Ros, Topic } = require("roslib");
 
-const ROS_PORT = process.env.ROS_PORT || null;
-const ROS_HOST = process.env.ROS_HOST || null;
+const ROS_PORT = process.env.ROS_PORT || "localhost";
+const ROS_HOST = process.env.ROS_HOST || "9090";
 
 module.exports = {
   subscribeToChatter: async () => {
