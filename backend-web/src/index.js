@@ -16,6 +16,12 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   console.log("Get Router", req.testing);
 
+  try {
+    RosHandler.subscribeToChatter();
+  } catch (error) {
+    console.log("Error", error.message);
+  }
+
   res.send("Hello World!");
 });
 

@@ -1,13 +1,7 @@
 version: '3.3'
 
-# volumes:
-#   backend-volume: #if needed
-#   frontend-volume: #if needed
-#   ros-volume: #if needed
-
 networks:
-  ros: # ros-master <--> ros-talker
-    # driver: bridge
+  ros: # ros-master <--> ros-talker <--> ros-listener (if enable)
   backend: # ros <--> backend-web
   frontend: # backend-web <--> frontend-web
 
@@ -16,8 +10,8 @@ services:
   ros-master:
     image: ros:noetic-ros-core
     command: stdbuf -o L roscore
-    ports:
-      - "9090:9090"
+    # ports:
+    #   - "9090:9090"
     networks:
       - ros
       - backend
@@ -55,7 +49,7 @@ services:
       - frontend
     environment:
       ROS_HOST: ros-master
-      ROS_PORT: 9090
+      ROS_PORT: 11311
       API_HOST: backend-web
       API_PORT: &api_port 3001
     depends_on:
