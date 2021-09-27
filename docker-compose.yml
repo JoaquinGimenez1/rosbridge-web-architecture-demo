@@ -11,16 +11,16 @@ networks:
         - subnet: 10.255.254.0/24
 
 services:
-################################
-# ROS side of the project      #
-################################
+#################################
+#    ROS side of the project    #
+#################################
   # ROS Master node running rosbridge_server
   ros-master:
     image: joaquingimenez1/noetic-rosbridge
     networks:
       ros:
     restart: always
-  # ROS Node publishing to topic /chatter
+  # ROS node publishing to topic /chatter
   ros-talker:
     image: ros:noetic-ros-core
     environment:
@@ -32,12 +32,12 @@ services:
     depends_on:
       - ros-master
     restart: always
-################################
-# Web side of the project      #
-################################
+#################################
+#    Web side of the project    #
+#################################
   # Express backend connecting ROS and the UI
-  backend-web:
-    build: ./backend-web
+  backend-api:
+    build: ./backend-api
     networks:
       ros:
       api:
@@ -45,21 +45,21 @@ services:
     environment:
       ROS_HOST: ros-master
       ROS_PORT: 9090
-      API_HOST: &api_host backend-web
+      API_HOST: &api_host backend-api
       API_PORT: &api_port 3001
     depends_on:
       - ros-master
-  # React froend talking to the backend-web only
+  # React froend talking to the backend-api only
   frontend-web:
     build: ./frontend-web
     networks:
       api:
     ports:
-      - "8081:80"
+      - "3000:3000"
     environment:
       REACT_APP_API_HOST: "10.255.255.2"
       REACT_APP_API_PORT: *api_port
     volumes:
       - ./frontend-web:/app
     depends_on:
-      - backend-web
+      - backend-api
