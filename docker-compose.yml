@@ -57,7 +57,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      REACT_APP_API_HOST: "10.255.255.2"
+      REACT_APP_API_HOST: "10.255.254.2"
       REACT_APP_API_PORT: *api_port
     volumes:
       - ./frontend-web:/app
