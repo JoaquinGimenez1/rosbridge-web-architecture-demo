@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master 
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       - name: Build and publish the image
         uses: docker/build-push-action@v2
         with:
