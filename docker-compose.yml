@@ -2,13 +2,7 @@ version: '3.3'
 
 networks:
   ros: # backend-web <-> ros-master <-> ros-talker 
-    ipam:
-      config:
-        - subnet: 10.255.255.0/24
   api: # backend-web <-> frontend-web
-    ipam:
-      config:
-        - subnet: 10.255.254.0/24
 
 services:
 #################################
@@ -18,7 +12,7 @@ services:
   ros-master:
     image: joaquingimenez1/noetic-rosbridge
     networks:
-      ros:
+      - ros
     restart: always
   # ROS node publishing to topic /chatter
   ros-talker:
@@ -28,7 +22,7 @@ services:
       ROS_HOSTNAME: "ros-talker"
     command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
     networks:
-      ros:
+      - ros
     depends_on:
       - ros-master
     restart: always
@@ -39,10 +33,10 @@ services:
   backend-api:
     build: ./backend-api
     networks:
-      ros:
-      api:
+      - ros
+      - api
     ports:
-      - "3001:3001" # Can be deleted and use a proxy
+      - "3001:3001" # Can be deleted by using a proxy
     volumes:
       - ./backend-api:/app
     environment:
@@ -56,7 +50,7 @@ services:
   frontend-web:
     build: ./frontend-web
     networks:
-      api:
+      - api
     ports:
       - "3000:3000"
     environment:
