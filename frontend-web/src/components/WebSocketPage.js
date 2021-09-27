@@ -1,33 +1,46 @@
-import React, { useState, useCallback, useMemo, useRef } from "react";
-import { Button, Typography, Stack } from "@mui/material";
+import React, { useState, useCallback, useEffect } from "react";
+import { Button, Typography, Stack, Divider } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
+const useStyles = makeStyles({
+  buttonStack: {
+    display: "flex",
+    alignContent: "center",
+    margin: "10px",
+  },
+  mainInfo: {
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "flex-end",
+    // justifyContent: "left",
+  },
+  results: {
+    display: "flex",
+    flexDirection: "column",
+  },
+});
 
 const API_HOST = process.env.REACT_APP_API_HOST || "localhost";
 const API_PORT = process.env.REACT_APP_API_PORT || "5000";
 const WEB_SOCKET_URL = `ws://${API_HOST}:${API_PORT}/api`;
 
 const WebSocketPage = () => {
-  //Public API that will echo messages sent to it back to the client
+  const classes = useStyles();
   const [socketUrl, setSocketUrl] = useState(WEB_SOCKET_URL);
-  const messageHistory = useRef([]);
+  const [messageHistory, setMessageHistory] = useState([]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onOpen: () => console.log("Connection Opened"),
+    onOpen: () => console.log("Connection to Backend API opened"),
     shouldReconnect: (closeEvent) => true,
   });
 
-  messageHistory.current = useMemo(
-    () => messageHistory.current.concat(lastMessage),
-    [lastMessage]
-  );
-
-  const handleClickChangeSocketUrl = useCallback(
-    () => setSocketUrl(WEB_SOCKET_URL),
-    []
-  );
+  useEffect(() => {
+    setMessageHistory((prevArray) => [lastMessage, ...prevArray]);
+  }, [lastMessage]);
 
   const handleClickSendMessage = useCallback(() => sendMessage("Hello"), []);
 
@@ -42,11 +55,9 @@ const WebSocketPage = () => {
   return (
     <div>
       <Typography variant="h4">Frontend of the project</Typography>
+      <Divider />
 
-      <Stack spacing={2} direction="row">
-        <Button variant="contained" onClick={handleClickChangeSocketUrl}>
-          Click Me to change Socket Url
-        </Button>
+      <Stack className={classes.buttonStack} spacing={2} direction="row">
         <Button
           variant="contained"
           onClick={handleClickSendMessage}
@@ -55,22 +66,34 @@ const WebSocketPage = () => {
           Click me to send Hello!
         </Button>
       </Stack>
-      <br />
-      <Typography>The WebSocket is currently {connectionStatus}</Typography>
-      <Typography>
-        Status: {connectionStatus === "Open" ? <CheckIcon /> : <CloseIcon />}
-      </Typography>
-      <Typography>Last message: {lastMessage?.data}</Typography>
-      <Typography>Passed messages:</Typography>
+      <Divider />
 
-      <code></code>
+      <div className={classes.mainInfo}>
+        <Typography>
+          Status: {connectionStatus === "Open" ? <CheckIcon /> : <CloseIcon />}
+        </Typography>
+        <Typography>The WebSocket is currently {connectionStatus}</Typography>
 
-      {messageHistory.current.length && (
-        <ul>
-          {messageHistory.current.map((message, idx) => (
-            <li key={idx}>{message?.data}</li>
+        <Divider />
+
+        <Typography>Last message: {lastMessage?.data}</Typography>
+
+        <Divider />
+
+        <Typography>Messages list:</Typography>
+      </div>
+
+      {messageHistory.length && (
+        <>
+          {messageHistory.map((message, idx) => (
+            <>
+              <code key={idx}>
+                Message #{messageHistory.length - idx}, Data: {message?.data}
+              </code>
+              <br />
+            </>
           ))}
-        </ul>
+        </>
       )}
     </div>
   );
