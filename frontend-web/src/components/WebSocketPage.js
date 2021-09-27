@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Button, Typography, Stack, Divider } from "@mui/material";
+import { Button, Typography, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import CheckIcon from "@mui/icons-material/Check";
@@ -7,9 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
 const useStyles = makeStyles({
-  buttonStack: {
-    display: "flex",
-    alignContent: "center",
+  button: {
     margin: "10px",
   },
   mainInfo: {
@@ -17,6 +15,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignContent: "flex-end",
     // justifyContent: "left",
+    margin: "10px",
   },
   results: {
     display: "flex",
@@ -30,13 +29,15 @@ const WEB_SOCKET_URL = `ws://${API_HOST}:${API_PORT}/api`;
 
 const WebSocketPage = () => {
   const classes = useStyles();
-  const [socketUrl, setSocketUrl] = useState(WEB_SOCKET_URL);
   const [messageHistory, setMessageHistory] = useState([]);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onOpen: () => console.log("Connection to Backend API opened"),
-    shouldReconnect: (closeEvent) => true,
-  });
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    WEB_SOCKET_URL,
+    {
+      onOpen: () => console.log("Connection to Backend API opened"),
+      shouldReconnect: (closeEvent) => true,
+    }
+  );
 
   useEffect(() => {
     setMessageHistory((prevArray) => [lastMessage, ...prevArray]);
@@ -55,17 +56,18 @@ const WebSocketPage = () => {
   return (
     <div>
       <Typography variant="h4">Frontend of the project</Typography>
+
       <Divider />
 
-      <Stack className={classes.buttonStack} spacing={2} direction="row">
-        <Button
-          variant="contained"
-          onClick={handleClickSendMessage}
-          disabled={readyState !== ReadyState.OPEN}
-        >
-          Click me to send Hello!
-        </Button>
-      </Stack>
+      <Button
+        className={classes.button}
+        variant="contained"
+        onClick={handleClickSendMessage}
+        disabled={readyState !== ReadyState.OPEN}
+      >
+        Click me to send Hello!
+      </Button>
+
       <Divider />
 
       <div className={classes.mainInfo}>
@@ -86,12 +88,12 @@ const WebSocketPage = () => {
       {messageHistory.length && (
         <>
           {messageHistory.map((message, idx) => (
-            <>
-              <code key={idx}>
+            <div key={idx}>
+              <code>
                 Message #{messageHistory.length - idx}, Data: {message?.data}
               </code>
               <br />
-            </>
+            </div>
           ))}
         </>
       )}
