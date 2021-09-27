@@ -1,0 +1,68 @@
+version: '3.3'
+
+networks:
+  ros: # backend-web <-> ros-master <-> ros-talker 
+    ipam:
+      config:
+        - subnet: 10.255.255.0/24
+  api: # backend-web <-> frontend-web
+    ipam:
+      config:
+        - subnet: 10.255.254.0/24
+
+services:
+#################################
+#    ROS side of the project    #
+#################################
+  # ROS Master node running rosbridge_server
+  ros-master:
+    image: joaquingimenez1/noetic-rosbridge
+    networks:
+      ros:
+    restart: always
+  # ROS node publishing to topic /chatter
+  ros-talker:
+    image: ros:noetic-ros-core
+    environment:
+      ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
+      ROS_HOSTNAME: "ros-talker"
+    command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
+    networks:
+      ros:
+    depends_on:
+      - ros-master
+    restart: always
+#################################
+#    Web side of the project    #
+#################################
+  # Express backend connecting ROS and the UI handling business logic
+  backend-api:
+    build: ./backend-api
+    networks:
+      ros:
+      api:
+    ports:
+      - "3001:3001" # Can be deleted and use a proxy
+    volumes:
+      - ./backend-api:/app
+    environment:
+      ROS_HOST: ros-master
+      ROS_PORT: 9090
+      API_HOST: &api_host backend-api
+      API_PORT: &api_port 3001
+    depends_on:
+      - ros-master
+  # React frontend able to talk to the backend-api only
+  frontend-web:
+    build: ./frontend-web
+    networks:
+      api:
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_HOST: "localhost" # Should use NGINX reverse proxy to handle "backend-api"
+      REACT_APP_API_PORT: *api_port
+    volumes:
+      - ./frontend-web:/app
+    depends_on:
+      - backend-api
