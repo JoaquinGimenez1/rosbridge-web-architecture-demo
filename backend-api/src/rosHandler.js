@@ -31,6 +31,7 @@ class RosHandler {
     this.listener.unsubscribe();
     this.listener = null;
   };
+
   subscribeToChatter = (callback) => {
     // Subscribing to a Topic
     // ----------------------

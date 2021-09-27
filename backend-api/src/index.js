@@ -2,6 +2,7 @@ const express = require("express");
 const RosHandler = require("./rosHandler");
 
 const app = express();
+// eslint-disable-next-line
 const expressWs = require("express-ws")(app);
 
 const HOST = process.env.API_HOST || "localhost";

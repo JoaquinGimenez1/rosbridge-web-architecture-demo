@@ -26,7 +26,10 @@ yarn
 cd /directory/to/scalable-web-ros
 
 # Start project
-docker-compose up # --build (if needed)
+yarn start # --build (if needed)
+
+# Cleanup network & images
+yarn clean
 ```
 
 At this point you can visit the UI using your browser `http://localhost:3000`
