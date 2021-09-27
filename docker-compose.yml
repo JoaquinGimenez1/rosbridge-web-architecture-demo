@@ -1,7 +1,7 @@
 version: '3.3'
 
 networks:
-  ros: # ros-master <-> ros-talker <--> backend-web
+  ros: # backend-web <--> ros-master <-> ros-talker 
   api: # backend-web <-> frontend-web
 
 services:
@@ -12,14 +12,37 @@ services:
     restart: always
   ros-talker:
     image: ros:noetic-ros-core
-    depends_on:
-      - ros-master
     environment:
       ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
       ROS_HOSTNAME: "ros-talker"
     command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
     networks:
       - ros
+    depends_on:
+      - ros-master
     restart: always
-  # backend-web:
-  # frontend-web:
+  backend-web:
+    build: ./backend-web
+    networks:
+      - ros
+      - api
+    environment:
+      ROS_HOST: ros-master
+      ROS_PORT: 9090
+      API_HOST: &api_host backend-web
+      API_PORT: &api_port 3001
+    depends_on:
+      - ros-master
+  frontend-web:
+    build: ./frontend-web
+    networks:
+      - api
+    ports:
+      - "8081:3000"
+    environment:
+      API_HOST: *api_host
+      API_PORT: *api_port
+    volumes:
+      - ./frontend-web:/app
+    depends_on:
+      - backend-web
