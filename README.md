@@ -4,8 +4,8 @@
 This project is intended to be used as a demo for a proposed architecture when 
 
 ## Installation requirements
-- docker `v20.10.8`
-- docker-compose `v1.25.0`
+- docker `v20.10.8` [installation](https://docs.docker.com/engine/install/ubuntu/)
+- docker-compose `v1.25.0` [installation](https://docs.docker.com/compose/install/)
 - nodejs `v14.17.0` [installation](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 - yarn `v1.22.10` [isntallation](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
 
@@ -20,17 +20,14 @@ yarn
 cd ../backend-api/
 yarn
 ```
-## How to run it
 
+## How to run it
 ```bash
 cd /directory/to/scalable-web-ros
 
 # Start project
 docker-compose up # --build (if needed)
-
 ```
-> Check for the following messages in the console 
-> `Rosbridge WebSocket server started at ws://0.0.0.0:9090`
 ### Summary
 At this point you should have: 
 - Rosbridge server running on `ws://localhost:9090`
