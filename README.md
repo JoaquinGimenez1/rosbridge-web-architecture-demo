@@ -1,7 +1,7 @@
 # ROS Web Scalable Architechture
 
 ## Getting Started
-This project is intended to be used as a demo for a proposed architecture when 
+This project is intended to be used as a demo for a proposed architecture when using a web client
 
 ## Installation requirements
 - docker `v20.10.8` [installation](https://docs.docker.com/engine/install/ubuntu/)
