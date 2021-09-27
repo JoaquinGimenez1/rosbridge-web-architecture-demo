@@ -4,11 +4,11 @@ networks:
   ros: # backend-web <-> ros-master <-> ros-talker 
     ipam:
       config:
-        - subnet: 10.255.254.0/24
+        - subnet: 10.255.255.0/24
   api: # backend-web <-> frontend-web
     ipam:
       config:
-        - subnet: 10.255.255.0/24
+        - subnet: 10.255.254.0/24
 
 services:
 ################################
