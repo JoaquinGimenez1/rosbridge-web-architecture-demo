@@ -10,4 +10,4 @@ RUN yarn --non-interactive
 
 COPY . .
 
-CMD [ "yarn", "run", "start" ]
+CMD [ "yarn", "run", "start:dev" ]

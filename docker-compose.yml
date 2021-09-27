@@ -35,13 +35,16 @@ services:
 #################################
 #    Web side of the project    #
 #################################
-  # Express backend connecting ROS and the UI
+  # Express backend connecting ROS and the UI handling business logic
   backend-api:
     build: ./backend-api
     networks:
       ros:
       api:
-        # ipv4_address: "10.255.255.2"
+    ports:
+      - "3001:3001" # Can be deleted and use a proxy
+    volumes:
+      - ./backend-api:/app
     environment:
       ROS_HOST: ros-master
       ROS_PORT: 9090
@@ -49,7 +52,7 @@ services:
       API_PORT: &api_port 3001
     depends_on:
       - ros-master
-  # React froend talking to the backend-api only
+  # React frontend able to talk to the backend-api only
   frontend-web:
     build: ./frontend-web
     networks:
@@ -57,7 +60,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      REACT_APP_API_HOST: "10.255.254.2"
+      REACT_APP_API_HOST: "localhost" # Should use NGINX reverse proxy to handle "backend-api"
       REACT_APP_API_PORT: *api_port
     volumes:
       - ./frontend-web:/app
