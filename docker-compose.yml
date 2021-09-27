@@ -1,8 +1,8 @@
 version: '3.3'
 
 networks:
-  ros: # backend-web <-> ros-master <-> ros-talker 
-  api: # backend-web <-> frontend-web
+  ros: # backend-api <-> ros-master <-> ros-talker 
+  api: # backend-api <-> frontend-web
 
 services:
 #################################
