@@ -2,10 +2,11 @@ version: '3.3'
 
 networks:
   ros: # ros-master <-> ros-talker <--> backend-web
+  api: # backend-web <-> frontend-web
 
 services:
   ros-master:
-    build: ./ros-master
+    image: joaquingimenez1/noetic-rosbridge
     networks:
       - ros
     restart: always
