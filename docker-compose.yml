@@ -40,8 +40,8 @@ services:
     ports:
       - "8081:3000"
     environment:
-      API_HOST: *api_host
-      API_PORT: *api_port
+      REACT_APP_API_HOST: *api_host
+      REACT_APP_API_PORT: *api_port
     volumes:
       - ./frontend-web:/app
     depends_on:

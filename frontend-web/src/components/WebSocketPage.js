@@ -5,8 +5,8 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
-const API_HOST = process.env.API_HOST || "localhost";
-const API_PORT = process.env.API_PORT || "5000";
+const API_HOST = process.env.REACT_APP_API_HOST || "localhost";
+const API_PORT = process.env.REACT_APP_API_PORT || "5000";
 const WEB_SOCKET_URL = `ws://${API_HOST}:${API_PORT}`;
 
 const WebSocketPage = () => {
