@@ -1,0 +1,14 @@
+version: '3.3'
+
+networks:
+  ros: # ros-master <-> ros-talker <--> backend-web
+
+services:
+  ros-master:
+    build: ./ros-master
+    networks:
+      - ros
+    restart: always
+  # ros-talker:
+  # backend-web:
+  # frontend-web:
