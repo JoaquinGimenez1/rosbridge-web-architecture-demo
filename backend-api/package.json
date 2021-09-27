@@ -1,6 +1,6 @@
 {
-  "name": "backend-web",
-  "version": "0.2.0",
+  "name": "backend-api",
+  "version": "0.3.0",
   "main": "src/index.js",
   "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
   "license": "ISC",
