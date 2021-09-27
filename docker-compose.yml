@@ -1,15 +1,26 @@
 version: '3.3'
 
 networks:
-  ros: # backend-web <--> ros-master <-> ros-talker 
+  ros: # backend-web <-> ros-master <-> ros-talker 
+    ipam:
+      config:
+        - subnet: 10.255.254.0/24
   api: # backend-web <-> frontend-web
+    ipam:
+      config:
+        - subnet: 10.255.255.0/24
 
 services:
+################################
+# ROS side of the project      #
+################################
+  # ROS Master node running rosbridge_server
   ros-master:
     image: joaquingimenez1/noetic-rosbridge
     networks:
-      - ros
+      ros:
     restart: always
+  # ROS Node publishing to topic /chatter
   ros-talker:
     image: ros:noetic-ros-core
     environment:
@@ -17,15 +28,20 @@ services:
       ROS_HOSTNAME: "ros-talker"
     command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
     networks:
-      - ros
+      ros:
     depends_on:
       - ros-master
     restart: always
+################################
+# Web side of the project      #
+################################
+  # Express backend connecting ROS and the UI
   backend-web:
     build: ./backend-web
     networks:
-      - ros
-      - api
+      ros:
+      api:
+        # ipv4_address: "10.255.255.2"
     environment:
       ROS_HOST: ros-master
       ROS_PORT: 9090
@@ -33,14 +49,15 @@ services:
       API_PORT: &api_port 3001
     depends_on:
       - ros-master
+  # React froend talking to the backend-web only
   frontend-web:
     build: ./frontend-web
     networks:
-      - api
+      api:
     ports:
-      - "8081:3000"
+      - "8081:80"
     environment:
-      REACT_APP_API_HOST: *api_host
+      REACT_APP_API_HOST: "10.255.255.2"
       REACT_APP_API_PORT: *api_port
     volumes:
       - ./frontend-web:/app
