@@ -28,9 +28,5 @@ cd /directory/to/scalable-web-ros
 # Start project
 docker-compose up # --build (if needed)
 ```
-### Summary
-At this point you should have: 
-- Rosbridge server running on `ws://localhost:9090`
-- ROS node by rosnodejs publishing messages to the topic `/chatter`
-- Express.js API backend ready to accept websocket connections on `ws://localhost:5000` and listen to ros topics on port `9090`
-- React frontend connecting via websocket to the API backend on port `5000` (not directly connected to ROS)
+
+At this point you can visit the UI using your browser `http://localhost:3000`
