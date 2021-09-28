@@ -1,7 +1,8 @@
 {
-  "name": "scalable-web-ros",
-  "version": "0.5.0",
-  "repository": "git@github.com:JoaquinGimenez1/scalable-web-ros.git",
+  "name": "rosbridge-web-architecture-demo",
+  "description": "This project is intended to be used as a demo for a proposed architecture when using a web client to connect to ROS.",
+  "version": "0.5.1",
+  "repository": "git@github.com:JoaquinGimenez1/rosbridge-web-architecture-demo.git",
   "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
   "license": "ISC",
   "scripts": {
