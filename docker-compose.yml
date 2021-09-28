@@ -10,7 +10,7 @@ services:
   #################################
   # ROS Bridge server
   ros-bridge:
-    image: joaquingimenez1/noetic-rosbridge
+    image: joaquingimenez1/noetic-rosbridge:1.0.1
     networks:
       - ros
     restart: always
