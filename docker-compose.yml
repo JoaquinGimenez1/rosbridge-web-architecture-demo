@@ -1,15 +1,15 @@
 version: '3.3'
 
 networks:
-  ros: # backend-api <-> ros-master <-> ros-talker 
+  ros: # backend-api <-> ros-bridge <-> ros-talker 
   api: # backend-api <-> frontend-web
 
 services:
-#################################
-#    ROS side of the project    #
-#################################
-  # ROS Master node running rosbridge_server
-  ros-master:
+  #################################
+  #    ROS side of the project    #
+  #################################
+  # ROS Bridge server
+  ros-bridge:
     image: joaquingimenez1/noetic-rosbridge
     networks:
       - ros
@@ -18,17 +18,17 @@ services:
   ros-talker:
     image: ros:noetic-ros-core
     environment:
-      ROS_MASTER_URI: &ros_master_uri "http://ros-master:11311"
+      ROS_MASTER_URI: &ros_master_uri "http://ros-bridge:11311"
       ROS_HOSTNAME: "ros-talker"
     command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
     networks:
       - ros
     depends_on:
-      - ros-master
+      - ros-bridge
     restart: always
-#################################
-#    Web side of the project    #
-#################################
+  #################################
+  #    Web side of the project    #
+  #################################
   # Express backend connecting ROS and the UI handling business logic
   backend-api:
     build: ./backend-api
@@ -36,16 +36,16 @@ services:
       - ros
       - api
     ports:
-      - "3001:3001" # Can be deleted by using a proxy
+      - "3001:3001"
     volumes:
       - ./backend-api:/app
     environment:
-      ROS_HOST: ros-master
+      ROS_HOST: ros-bridge
       ROS_PORT: 9090
       API_HOST: &api_host backend-api
       API_PORT: &api_port 3001
     depends_on:
-      - ros-master
+      - ros-bridge
   # React frontend able to talk to the backend-api only
   frontend-web:
     build: ./frontend-web
@@ -54,7 +54,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      REACT_APP_API_HOST: "localhost" # Should use NGINX reverse proxy to handle "backend-api"
+      REACT_APP_API_HOST: "localhost"
       REACT_APP_API_PORT: *api_port
     volumes:
       - ./frontend-web:/app
