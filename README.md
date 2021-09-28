@@ -1,7 +1,7 @@
-# ROS Web Scalable Architechture
+# Rosbridge Web Architecture Demo
 
 ## Getting Started
-This project is intended to be used as a demo for a proposed architecture when using a web client
+This project is intended to be used as a demo for a proposed architecture when using a web client to connect to ROS.
 
 ## Installation requirements
 - docker `v20.10.8` [installation](https://docs.docker.com/engine/install/ubuntu/)
@@ -33,3 +33,6 @@ yarn clean
 ```
 
 At this point you can visit the UI using your browser `http://localhost:3000`
+
+## Architecture
+![SpeakerDraw drawio](https://user-images.githubusercontent.com/19492279/135118667-886d8e76-0c53-48ae-86b9-b99c14dda7df.png)
