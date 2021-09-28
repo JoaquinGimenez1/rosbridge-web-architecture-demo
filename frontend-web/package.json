@@ -1,6 +1,6 @@
 {
   "name": "frontend-web",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "author": "Joaquin Gimenez <jg@joaquingimenez.com>",
   "license": "ISC",
   "dependencies": {
