@@ -11,7 +11,7 @@ This project is intended to be used as a demo for a proposed architecture when u
 
 ### Install Instructions
 ```bash
-cd /directory/to/scalable-web-ros
+cd /directory/to/rosbridge-web-architecture-demo
 # Install frontend-web packages
 cd frontend-web/
 yarn
@@ -23,7 +23,7 @@ yarn
 
 ## How to run it
 ```bash
-cd /directory/to/scalable-web-ros
+cd /directory/to/rosbridge-web-architecture-demo
 
 # Start project
 yarn start # --build (if needed)
