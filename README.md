@@ -28,7 +28,7 @@ cd /directory/to/rosbridge-web-architecture-demo
 # Start project
 yarn start # --build (if needed)
 
-# Cleanup network & images
+# Cleanup docker networks & images
 yarn clean
 ```
 
