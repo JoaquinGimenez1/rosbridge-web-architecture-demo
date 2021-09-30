@@ -36,4 +36,4 @@ At this point you can visit the UI using your browser `http://localhost:3000`
 > If you need to change ports in the frontend for whatever reason, you can do so by editing the `docker-compose.yml` file on line 55 to `- "XXXX:3000"` 
 
 ## Architecture
-![SpeakerDraw drawio](https://user-images.githubusercontent.com/19492279/135118667-886d8e76-0c53-48ae-86b9-b99c14dda7df.png)
+![architecture-chart](https://user-images.githubusercontent.com/19492279/135118667-886d8e76-0c53-48ae-86b9-b99c14dda7df.png)
