@@ -1,0 +1,62 @@
+version: '3.3'
+
+networks:
+  ros: # backend-api <-> ros-bridge <-> ros-talker 
+  api: # backend-api <-> frontend-web
+
+services:
+  #################################
+  #    ROS side of the project    #
+  #################################
+  # ROS Bridge server
+  ros-bridge:
+    image: joaquingimenez1/noetic-rosbridge:1.1.1
+    networks:
+      - ros
+    restart: always
+  # ROS node publishing to topic /chatter
+  ros-talker:
+    image: ros:noetic-ros-core
+    environment:
+      ROS_MASTER_URI: &ros_master_uri "http://ros-bridge:11311"
+      ROS_HOSTNAME: "ros-talker"
+    command: stdbuf -o L rostopic pub /chatter std_msgs/String "Hello from ROS!" -r 1
+    networks:
+      - ros
+    depends_on:
+      - ros-bridge
+    restart: always
+  #################################
+  #    Web side of the project    #
+  #################################
+  # Express backend connecting ROS and the UI handling business logic
+  backend-api:
+    build: ./backend-api # TODO: ADD image tag not build
+    # image: joaquingimenez1/noetic-rosbridge:1.1.1
+    networks:
+      - ros
+      - api
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend-api:/app
+    environment:
+      ROS_HOST: ros-bridge
+      ROS_PORT: 9090
+      API_HOST: &api_host backend-api
+      API_PORT: &api_port 3001
+    depends_on:
+      - ros-bridge
+  # React frontend able to talk to the backend-api only
+  frontend-web:
+    build: ./frontend-web # TODO: ADD image tag not build
+    # image: joaquingimenez1/noetic-rosbridge:1.1.1
+    networks:
+      - api
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_HOST: "localhost"
+      REACT_APP_API_PORT: *api_port
+    depends_on:
+      - backend-api
