@@ -14,7 +14,7 @@
     "nodemon": "^2.0.13"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-ws": "^5.0.2",
     "roslib": "^1.1.0"
   }
